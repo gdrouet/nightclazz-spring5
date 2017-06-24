@@ -11,6 +11,7 @@ var app = (function() {
     var canvas;
     const catalog = $('#catalog');
     const view = $('#view');
+    const name = $('#name');
 
     var evtSource = new EventSource(apiUrl + "/drawings");
 
@@ -32,6 +33,12 @@ var app = (function() {
     };
 
     function add() {
+        const author = name.val();
+        if (author.trim() === '') {
+            alert('Enter your name first!');
+            return
+        }
+
         copyContext.drawImage(canvas,
             drawingAreaX, drawingAreaY, drawingAreaWidth, drawingAreaHeight,
             0, 0, copyContext.canvas.width, copyContext.canvas.height);
@@ -52,7 +59,7 @@ var app = (function() {
 
         req.open('POST', apiUrl + '/drawing', true);
         req.setRequestHeader("Content-Type", "application/json");
-        req.send(JSON.stringify({author: 'gdrouet', base64Image: base64Image.substring(base64Image.indexOf(',') + 1)}));
+        req.send(JSON.stringify({author: author, base64Image: base64Image.substring(base64Image.indexOf(',') + 1)}));
     }
 
     function start(panel) {
