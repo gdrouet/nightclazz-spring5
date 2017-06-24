@@ -1,0 +1,24 @@
+.minimize {
+    -moz-transform:scale(0.3);
+    -webkit-transform:scale(0.3);
+    transform:scale(0.3);
+}
+
+#catalog-container {
+    display: flex;
+    height: 500px;
+}
+
+#catalog {
+    overflow: auto;
+}
+
+#catalog > img {
+    border: solid 1px gray;
+    margin: -65px -85px -65px -85px;
+}
+
+#view {
+    margin-top: 20px;
+    border: solid 1px gray;
+}
