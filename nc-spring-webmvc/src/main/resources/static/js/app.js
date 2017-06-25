@@ -63,10 +63,12 @@ var app = (function() {
     }
 
     function start(panel) {
-        panel.hidden = false;
-        $.getScript('/js/html5-canvas-drawing-app.js', function() {
-            canvas = drawingApp.init();
-        });
+        if (panel.hidden) {
+            panel.hidden = false;
+            $.getScript('/js/html5-canvas-drawing-app.js', function () {
+                canvas = drawingApp.init();
+            });
+        }
     }
 
     return {
