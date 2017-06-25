@@ -129,11 +129,11 @@ Créer maintenant une classe `DrawingController` et injectez dans le constructeu
 Implémenter un service web sur l'URI `/drawing/{id}` qui:
 * Prend en paramètre l'ID du dessin (type String)
 * Retourne un tableau de `byte` (precisez dans `@GetMapping` l'attribut `produces=MediaType.IMAGE_PNG_VALUE` et ajoutez l'annotation `ResponseBody`)
-* Utilise `ReactiveMongoTemplate#mongoTemplate.findById` pour charger un dessin de type `Drawing` et le map en tableau de `byte`
+* Utilise `ReactiveMongoTemplate#findById()` pour charger un dessin de type `Drawing` et le map en tableau de `byte`
 
 Implémentez une seconde méthode avec un mapping sur `/`:
 * Elle prend en paramètre le `PushBuilder` l'API servlet 4
-* Utilisez `ReactiveMongoTemplate#mongoTemplate.find` pour charger la liste des dessins via le type `DrawingInfo` et effectuez un `server-push`  sur chacune des URLs d'image obtenues à partir des ID des dessins.
+* Utilisez `ReactiveMongoTemplate#find()` pour charger la liste des dessins via le type `DrawingInfo` et effectuez un `server-push`  sur chacune des URLs d'image obtenues à partir des ID des dessins.
 * Retourne la String `drawing.html`
 
 Enfin créer une classe `@Configuration` dans laquelle vous:
