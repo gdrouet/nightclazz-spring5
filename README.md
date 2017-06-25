@@ -145,7 +145,7 @@ Vous y trouverez:
 
 * Un répertoire `static` dont le contenu sera exposé par `Spring Boot`. C'est la partie `front` de l'application.
 * Un `application.yml` servant de base à la configuration HTTPS
-* Un `keystore` référencé dans `applicationn.yml`
+* Un `keystore` référencé dans `application.yml`
 
 `HTTP/2` ne fonctionne qu'en HTTPs. 
 C'est pour cela qu'il faut avoir les éléments de configuration nécessaires à l'activation de HTTPs.
