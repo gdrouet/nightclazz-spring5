@@ -26,7 +26,7 @@ var app = (function() {
         catalog.prepend(img);
 
         $("#" + data.id).hover(function(){
-            view.html("<img src='" + img.src + "'>");
+            view.html("<img src='" + img.src + "'><span class='help-block'>&nbsp;Author: " + data.author + "</span>");
             view.show();
         }, function(){
         });
