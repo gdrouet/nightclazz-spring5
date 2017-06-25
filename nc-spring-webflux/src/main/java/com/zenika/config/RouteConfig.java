@@ -22,7 +22,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
  *
  * @author Guillaume DROUET
  */
-@Configuration
+//@Configuration
 public class RouteConfig {
 
     private static final Mono<ServerResponse> ALLOW_CROSS_ORIGIN_RESPONSE =
