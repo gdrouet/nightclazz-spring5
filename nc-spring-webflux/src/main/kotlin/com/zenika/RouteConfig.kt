@@ -17,37 +17,18 @@ import reactor.core.publisher.Mono
 @Configuration
 open class RouteConfig {
 
-    val ALLOW_CROSS_ORIGIN_RESPONSE: Mono<ServerResponse> = initJsonResponse()
-            .header("Access-Control-Allow-Headers", "Content-Type")
-            .header("Access-Control-Allow-Methods", "POST, GET")
-            .build()
-
     @Bean
     open fun apiRouter(controller: ReactiveDrawingController) = router {
         "/drawing".nest {
-            method(OPTIONS, {
-                ALLOW_CROSS_ORIGIN_RESPONSE
-            })
-            method(POST).nest {
-                contentType(APPLICATION_JSON) {
-                    req -> initResponse().body(controller.add(req.bodyToMono<Drawing>(Drawing::class.java)), String::class.java)
-                }
+            method(OPTIONS, { ok().build() })
+            (method(POST) and contentType(APPLICATION_JSON)).invoke {
+                req -> ok().body(controller.add(req.bodyToMono<Drawing>(Drawing::class.java)), String::class.java)
             }
         }.also {
-            "/drawings".nest {
-                GET("/", {
-                    initResponse().contentType(TEXT_EVENT_STREAM)
-                            .body<DrawingInfo, Flux<DrawingInfo>>(controller.drawings, DrawingInfo::class.java)
-                })
+            ("/drawings" and method(GET)).invoke {
+                ok().contentType(TEXT_EVENT_STREAM)
+                        .body<DrawingInfo, Flux<DrawingInfo>>(controller.drawings, DrawingInfo::class.java)
             }
         }
-    }
-
-    private fun initJsonResponse(): ServerResponse.BodyBuilder {
-        return initResponse().contentType(MediaType.APPLICATION_JSON)
-    }
-
-    private fun initResponse(): ServerResponse.BodyBuilder {
-        return ok().header("Access-Control-Allow-Origin", "https://localhost:8443")
     }
 }

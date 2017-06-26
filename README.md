@@ -315,12 +315,15 @@ Pour ce faire, créez une interface `DrawingRepository` qui étend `ReactiveCrud
 Référez-vous à la Javadoc afin de savoir comment configurer vos generics.
 
 Il faut à présent configurer le `CORS` pour que des requêtes depuis `https://localhost:8443` soit acceptées.
-Dans votre bean de configuration des routes, faites en sorte que toutes les réponses envoient le header `Access-Control-Allow-Origin` avec la valeur `https://localhost:8443`.
-Le protocole HTTP prévoit aussi d'envoyer une requête `OPTIONS` afin de savoir quelles requêtes seront acceptées.
-Faites en sorte que toute requête `OPTIONS` envoyée sur `/drawing*` retourne une réponse avec comme header:
-* `Access-Control-Allow-Origin` avec la valeur `https://localhost:8443`
-* `Access-Control-Allow-Headers` avec la valeur `Content-Type`
-* `Access-Control-Allow-Methods` avec la valeur `POST, GET`
+Le protocole HTTP prévoit d'envoyer une requête `OPTIONS` afin de savoir quelles requêtes seront acceptées.
+Dans votre bean de configuration des routes, faites en sorte qu'une requête sur `/drawing*` avec la méthode `OPTIONS` soit `ok`.
+
+Créez ensuite une nouvelle classe de configuration annotée `@EnableWebFlux` qui implémente `WebFluxConfigurer`.
+Surchargez `addCorsMappings(CorsRegistry)` et utilisez le registre pour faire les configurations suivantes:
+* Méthode `GET` autorisée sur `/drawings`
+* Méthode `POST` autorisée sur `/drawing`
+* `https://localhost:8443` comme origine autorisée sur `/drawings` et `/drawing`
+* `Content-Type` comme header autorisée sur `/drawings` et `/drawing`
 
 Il ne reste plus qu'à lancer le module `WebFlux`.
 Configurer votre IDE pour passer les arguments suivants;

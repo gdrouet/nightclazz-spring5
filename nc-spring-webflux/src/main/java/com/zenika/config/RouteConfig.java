@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.OPTIONS;
@@ -25,12 +24,6 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 //@Configuration
 public class RouteConfig {
 
-    private static final Mono<ServerResponse> ALLOW_CROSS_ORIGIN_RESPONSE =
-            initJsonResponse()
-                    .header("Access-Control-Allow-Headers", "Content-Type")
-                    .header("Access-Control-Allow-Methods", "POST, GET")
-                    .build();
-
     /**
      * Defines the {@code RouterFunction} that will map the {@link ReactiveDrawingController} methods to REST endpoints.
      *
@@ -39,15 +32,13 @@ public class RouteConfig {
      */
     @Bean
     public RouterFunction<ServerResponse> routingFunction(final ReactiveDrawingController controller) {
-        return getDrawingsRoute(controller)
-                .and(addDrawingRoute(controller))
-                .and(allowCrossOriginRequests());
+        return getDrawingsRoute(controller).and(addDrawingRoute(controller)).and(addCorsRoute());
     }
 
     private static RouterFunction<ServerResponse> getDrawingsRoute(final ReactiveDrawingController controller) {
         return route(
                 GET("/drawings"),
-                req -> initResponse().contentType(MediaType.TEXT_EVENT_STREAM).body(controller.getDrawings(), DrawingInfo.class)
+                req -> ok().contentType(MediaType.TEXT_EVENT_STREAM).body(controller.getDrawings(), DrawingInfo.class)
         );
     }
 
@@ -58,15 +49,11 @@ public class RouteConfig {
         );
     }
 
-    private static RouterFunction<ServerResponse> allowCrossOriginRequests() {
-        return route(OPTIONS("/drawing*"), req -> ALLOW_CROSS_ORIGIN_RESPONSE);
+    private static RouterFunction<ServerResponse> addCorsRoute() {
+        return route(OPTIONS("/drawing*"), req -> ok().build());
     }
 
     private static ServerResponse.BodyBuilder initJsonResponse() {
-        return initResponse().contentType(MediaType.APPLICATION_JSON);
-    }
-
-    private static ServerResponse.BodyBuilder initResponse() {
-        return ok().header("Access-Control-Allow-Origin", "https://localhost:8443");
+        return ok().contentType(MediaType.APPLICATION_JSON);
     }
 }
