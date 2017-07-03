@@ -308,11 +308,12 @@ Nous avons néanmoins deux problèmes que nous allons traiter:
 Créez une classe `ReactiveDrawingControllerImpl`.
 Assurez-vous qu'elle est bien injectée dans le contexte Spring tout en étant ignorée dans les tests unitaires.
 
-Pour récupérer les dessins dans un flux continu qui alimentera la connexion SSE, utilisez `ReactiveMongoTemplate#tail`.
-Pour la sauvegarde, vous disposez d'un `Mono<Drawing>` en paramètre qui peut être utilisé dans un `ReactiveCrudRepository`.
-Ce dernier peut être spécialisé pour les dessins.
+Vous devez injecter dans votre contrôleur un bean qui étend `ReactiveCrudRepository` afin de récupérer et sauvegarder les dessins.
 Pour ce faire, créez une interface `DrawingRepository` qui étend `ReactiveCrudRepository`.
-Référez-vous à la Javadoc afin de savoir comment configurer vos generics.
+Ce dernier peut être spécialisé pour les dessins, référez-vous à la Javadoc afin de savoir comment configurer vos generics.
+Pour la sauvegarde, vous disposez d'un `Mono<Drawing>` en paramètre de la méthode `add` du contrôleur qui peut être utilisé dans une méthode `saveAll` du `ReactiveCrudRepository`.
+Pour récupérer les dessins dans un flux continu qui alimentera la connexion SSE, vous devez utiliser un `tailable cursor`.
+Ajoutez dans votre `DrawingRepository` une méthode qui retournera un `Flux` qui est annotée `@Tailable`.
 
 Il faut à présent configurer le `CORS` pour que des requêtes depuis `https://localhost:8443` soit acceptées.
 Le protocole HTTP prévoit d'envoyer une requête `OPTIONS` afin de savoir quelles requêtes seront acceptées.

@@ -31,13 +31,11 @@ public class ReactiveDrawingControllerConfig {
     /**
      * Builds a {@link Drawing} controller with its dependencies.
      *
-     * @param template the mongo template
      * @param repository the CRUD repository injected to the controller
      * @return the new bean
      */
     @Bean
-    public ReactiveDrawingController drawingController(final ReactiveMongoTemplate template,
-                                                       final DrawingRepository repository) {
-        return new ReactiveDrawingControllerImpl(template, repository);
+    public ReactiveDrawingController drawingController(final DrawingRepository repository) {
+        return new ReactiveDrawingControllerImpl(repository);
     }
 }
